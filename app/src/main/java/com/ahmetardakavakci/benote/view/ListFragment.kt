@@ -32,9 +32,7 @@ class ListFragment : Fragment() {
         super.onAttach(context)
         val ft = fragmentManager?.beginTransaction();
         if (Build.VERSION.SDK_INT >= 26) ft?.setReorderingAllowed(false)
-        println("Refresh started")
         ft?.detach(this)?.attach(this)?.commit()
-        println("Refresh finished")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +55,6 @@ class ListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.addFab.setOnClickListener { addFab(view) }
 
-        println("onViewCreated")
         requireActivity().window.navigationBarColor = ContextCompat.getColor(requireContext(), R.color.white)
 
         binding.notesRecycler.apply {
