@@ -1,11 +1,14 @@
 package com.ahmetardakavakci.benote.view
 
+import android.content.Context
+import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ahmetardakavakci.benote.NotesAdapter
@@ -20,13 +23,25 @@ class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
 
+    lateinit private var notesAdapter: NotesAdapter
+
     private lateinit var db: DatabaseNote
-    private lateinit var allNotes : List<Note>
+    private lateinit var allNotes: List<Note>
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val ft = fragmentManager?.beginTransaction();
+        if (Build.VERSION.SDK_INT >= 26) ft?.setReorderingAllowed(false)
+        println("Refresh started")
+        ft?.detach(this)?.attach(this)?.commit()
+        println("Refresh finished")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = DatabaseNote.getDatabase(requireContext())
         allNotes = db.daoNote().getAll()
+        notesAdapter = NotesAdapter(allNotes)
     }
 
     override fun onCreateView(
@@ -42,21 +57,15 @@ class ListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.addFab.setOnClickListener { addFab(view) }
 
+        println("onViewCreated")
         requireActivity().window.navigationBarColor = ContextCompat.getColor(requireContext(), R.color.white)
 
         binding.notesRecycler.apply {
             layoutManager = LinearLayoutManager(requireActivity())
-            adapter = NotesAdapter(allNotes)
+            adapter = notesAdapter
         }
 
-        if (binding.notesRecycler.adapter != null) {
-            binding.notesRecycler.adapter!!.notifyDataSetChanged()
-            println("adapter is not empty")
-        } else {
-            println("adapter is null")
-        }
-
-
+        notesAdapter.notifyDataSetChanged()
 
     }
 

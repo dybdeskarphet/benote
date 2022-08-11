@@ -4,10 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/circle.xml" value="0.3415" />
+        <entry key="app/src/main/res/drawable/color_cursor.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.3415" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.36302083333333335" />
-        <entry key="app/src/main/res/layout/fragment_content.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/fragment_list.xml" value="0.3848958333333333" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.3997985901309164" />
+        <entry key="app/src/main/res/layout/fragment_content.xml" value="0.3727699530516432" />
+        <entry key="app/src/main/res/layout/fragment_list.xml" value="0.33" />
         <entry key="app/src/main/res/layout/recycler_line.xml" value="0.615009746588694" />
       </map>
     </option>

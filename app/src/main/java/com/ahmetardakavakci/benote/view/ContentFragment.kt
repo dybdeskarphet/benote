@@ -7,8 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.colorspace.ColorModel
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -16,9 +15,10 @@ import com.ahmetardakavakci.benote.R
 import com.ahmetardakavakci.benote.databinding.FragmentContentBinding
 import com.ahmetardakavakci.benote.db.DatabaseNote
 import com.ahmetardakavakci.benote.db.Note
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ContentFragment : Fragment() {
 
@@ -37,6 +37,11 @@ class ContentFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = DatabaseNote.getDatabase(requireContext())
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            view?.findNavController()?.navigate(contentToList)
+        }
+
     }
 
     override fun onCreateView(
@@ -52,24 +57,22 @@ class ContentFragment : Fragment() {
 
         binding.apply {
             // collapse all fabs
-            deleteFab.visibility = View.INVISIBLE
-            saveFab.visibility = View.INVISIBLE
-            colorLayout.visibility = View.INVISIBLE
             deleteFab.alpha = 0f
             saveFab.alpha = 0f
             menuFab.shrink()
+            colorMenu.shrink()
 
             // fab click listeners
             saveFab.setOnClickListener { saveFab(view) }
             deleteFab.setOnClickListener {
 
-                GlobalScope.launch(Dispatchers.IO) {
+                CoroutineScope(Dispatchers.IO).launch() {
                     db.daoNote().delete(note)
                 }
 
                 view.findNavController().navigate(contentToList)
             }
-            backFab.setOnClickListener{ view.findNavController().navigate(contentToList) }
+            colorMenu.setOnClickListener { colorMenu(view) }
             menuFab.setOnClickListener { menuFab(view) }
 
             redSel.setOnClickListener {
@@ -144,30 +147,33 @@ class ContentFragment : Fragment() {
                 with(binding){
                     titleText.setText("")
                     contentText.setText("")
-                    deleteFab.visibility = View.INVISIBLE
-                    saveFab.setMargins(16,16,16,80)
-                    colorLayout.setMargins(16,40,16,150)
+                    deleteFab.visibility = View.GONE
+                    menuFab.visibility = View.GONE
+                    saveFab.setMargins(16,16,16,16)
+                    saveFab.visibility = View.VISIBLE
                 }
 
             } else {
 
-                GlobalScope.launch(Dispatchers.IO) {
+                CoroutineScope(Dispatchers.IO).launch() {
                     note = db.daoNote().getById(choosenId)
 
-                    with(binding) {
-                        titleText.setText(note.titleString)
-                        contentText.setText(note.contentString)
+                    withContext(Dispatchers.Main) {
+                        with(binding) {
+                            titleText.setText(note.titleString)
+                            contentText.setText(note.contentString)
 
-                        if(note.colorInt == 0) {
-                            val white = ContextCompat.getColor(requireContext(), R.color.white)
-                            binding.linearLayout.setBackgroundColor(white)
-                            requireActivity().window.navigationBarColor = white
-                        } else {
-                            binding.linearLayout.setBackgroundColor(note.colorInt!!)
-                            requireActivity().window.navigationBarColor = note.colorInt!!
+                            if(note.colorInt == 0) {
+                                val white = ContextCompat.getColor(requireContext(), R.color.white)
+                                binding.linearLayout.setBackgroundColor(white)
+                                requireActivity().window.navigationBarColor = white
+                            } else {
+                                binding.linearLayout.setBackgroundColor(note.colorInt!!)
+                                requireActivity().window.navigationBarColor = note.colorInt!!
+                                color = note.colorInt!!
+                            }
                         }
                     }
-
                 }
 
 
@@ -186,7 +192,6 @@ class ContentFragment : Fragment() {
                    if (!new) {
                        deleteFab.visibility = View.VISIBLE
                    }
-                   colorLayout.visibility = View.VISIBLE
                    menuFab.extend()
                }
            } else {
@@ -195,11 +200,20 @@ class ContentFragment : Fragment() {
                    if (!new) {
                        deleteFab.visibility = View.INVISIBLE
                    }
-                   colorLayout.visibility = View.INVISIBLE
                    menuFab.shrink()
                }
            }
        }
+    }
+
+    private fun colorMenu(view: View) {
+        if (binding.colorLayout.visibility == View.INVISIBLE) {
+            binding.colorLayout.visibility = View.VISIBLE
+            binding.colorMenu.extend()
+        } else {
+            binding.colorLayout.visibility = View.INVISIBLE
+            binding.colorMenu.shrink()
+        }
     }
 
     private fun saveFab(view: View) {
@@ -217,14 +231,14 @@ class ContentFragment : Fragment() {
                     null, title, content, color
                 )
 
-                GlobalScope.launch(Dispatchers.IO) {
+                CoroutineScope(Dispatchers.IO).launch {
                     db.daoNote().insert(note)
                 }
 
                 view.findNavController().navigate(contentToList)
 
             } else if (!new && title.isNotEmpty() && content.isNotEmpty()){
-                GlobalScope.launch(Dispatchers.IO) {
+                CoroutineScope(Dispatchers.IO).launch() {
                     db.daoNote().update(choosenId, title, content, color)
                 }
 

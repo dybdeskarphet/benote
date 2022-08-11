@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="main_light">#FFC1B098</color>
-    <color name="main_mid">#FF9B9B93</color>
-    <color name="main_dark">#FF39393A</color>
+    <color name="main_light">#FFCCC9E7</color>
+    <color name="main_mid">#FF856A5D</color>
+    <color name="main_dark">#FF60463B</color>
     <color name="second_light">#FF81F0E5</color>
     <color name="second_dark">#FF78C091</color>
     <color name="black">#FF000000</color>
