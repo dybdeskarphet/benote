@@ -2,10 +2,6 @@
 
 Welcome to Benote, an elegant notetaking app designed for Android users. With its sleek UI and soothing pastel colors, Benote offers a delightful notetaking experience. You can easily [download the app here](https://github.com/dybdeskarphet/benote/releases/download/1.1/app-debug.apk).
 
-## Screenshots
-
-<img src="screenshots/edit_note.jpg" alt="Edit Note" width="240" height="520"> <img src="screenshots/note_list.jpg" alt="Note List" width="240" height="520"> <img src="screenshots/new_note.jpg" alt="New Note" width="240" height="520">
-
 ## Features
 
 - **User-Friendly Interface**: Benote provides a clean and intuitive UI for a seamless notetaking experience.
@@ -15,6 +11,10 @@ Welcome to Benote, an elegant notetaking app designed for Android users. With it
 - **Effortless Editing**: Edit your notes with ease using the simple and efficient editing features.
 
 - **Organized Note List**: Easily navigate through your notes with a well-organized note list, ensuring you find what you need quickly.
+
+## Screenshots
+
+<img src="screenshots/edit_note.jpg" alt="Edit Note" width="240" height="520"> <img src="screenshots/note_list.jpg" alt="Note List" width="240" height="520"> <img src="screenshots/new_note.jpg" alt="New Note" width="240" height="520">
 
 ## Installation Guide
 
