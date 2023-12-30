@@ -1,4 +1,4 @@
-# Benote: A Stylish Notetaking Experience for Android
+# Benote
 
 Welcome to Benote, an elegant notetaking app designed for Android users. With its sleek UI and soothing pastel colors, Benote offers a delightful notetaking experience. You can easily [download the app here](https://github.com/dybdeskarphet/benote/releases/download/1.1/app-debug.apk).
 
